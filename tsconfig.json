@@ -1,0 +1,21 @@
+// Servidor e testes. O Node 22.18+ roda os .ts direto (remove os tipos), então só vale TypeScript "apagável":
+// sem enum, sem namespace com valor, sem parameter properties. O tsc aqui só confere tipos (noEmit).
+// O front tem o próprio tsconfig em web/.
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "lib": ["es2023"],
+    "types": ["node"],
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "skipLibCheck": true
+  },
+  "include": ["server/**/*.ts", "shared/**/*.ts", "test/**/*.ts"]
+}

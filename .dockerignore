@@ -1,0 +1,25 @@
+# Só entra no contexto o que o Dockerfile copia: package.json, package-lock.json, vite.config.ts, shared/, server/ e web/.
+.git
+.gitignore
+.github
+.claude
+.vscode
+.idea
+node_modules
+web/dist
+web/public/stockfish
+data
+*.db
+*.db-*
+test
+test-results
+screenshots
+docker-compose.yml
+Dockerfile
+.dockerignore
+*.md
+*.log
+.env
+.env.*
+*.pem
+*.key

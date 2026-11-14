@@ -1,0 +1,35 @@
+# docker compose up -d --build   →  http://localhost:3000
+# O banco (salas, partidas em andamento e terminadas) fica no volume xadrez-data.
+# Atrás de um proxy reverso, ele precisa repassar o WebSocket em /ws (veja o README).
+services:
+  xadrez:
+    build: .
+    image: xadrez:latest
+    container_name: xadrez
+    ports:
+      - "3000:3000"
+    environment:
+      DB_PATH: /data/xadrez.db
+      # Atrás de proxy: o IP do cliente vem do último item de X-Forwarded-For (limites por IP).
+      # TRUST_PROXY: "1"
+      # Pela Cloudflare: faixas de quem entrega o tráfego dela (CIDR, ou "cloudflare"); vindo delas, vale o CF-Connecting-IP.
+      # CF_TRUSTED_PEERS: cloudflare
+      # URL pública (vai no campo Site do PGN):
+      # PUBLIC_URL: https://xadrez.exemplo.com
+      # Se o site abre por mais de um endereço, liste as origens aceitas no WebSocket:
+      # ALLOWED_ORIGINS: https://xadrez.exemplo.com,https://www.xadrez.exemplo.com
+      # Prazos e limites (padrões no README):
+      # ROOM_TTL_DAYS: "7"
+      # DISCONNECT_GRACE_SECONDS: "60"
+    volumes:
+      - xadrez-data:/data
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+volumes:
+  xadrez-data:

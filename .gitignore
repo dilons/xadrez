@@ -1,0 +1,10 @@
+node_modules/
+web/dist/
+web/public/stockfish/
+data/
+*.db
+*.db-*
+test-results/
+screenshots/
+.env
+.env.*
