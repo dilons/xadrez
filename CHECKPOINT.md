@@ -2,7 +2,7 @@
 
 > **Data:** 14 de novembro de 2026 · **Código:** `main` (PRs #46 e #47); publicação no PR #49 (`feat/xadrez-publicacao`: IP real atrás da Cloudflare, `scripts/release.sh`, `scripts/espelho.sh` e rodapé com o código-fonte) · **Testes:** `npm test` (62), `npm run typecheck` e `npm run test:e2e` verdes, CI verde no #49.
 >
-> **Ainda não está no ar.** A branch `feat/xadrez` do kamino tem o manifesto, o túnel, o DNS e o backup, mas a imagem é um marcador (`sha256:000…`). Falta, em ordem: criar o espelho público, gerar a imagem, abrir o PR no kamino (ver §7).
+> **Ainda não está no ar.** A branch `feat/xadrez` do kamino tem o manifesto, o túnel, o DNS e o backup, mas a imagem é um marcador (`sha256:000…`). O espelho público `github.com/dilons/xadrez` já existe e está com a pasta do PR #49. Falta, em ordem: mesclar o #49, gerar a imagem, abrir o PR no kamino (ver §7).
 
 Este arquivo é o ponto de partida para continuar o desenvolvimento: o estado de cada fase, o que falta e as armadilhas já encontradas. O README descreve o app.
 
@@ -107,7 +107,7 @@ Para testar com duas pessoas na mesma máquina, abra uma aba em `localhost` e ou
 
 **Para pôr no ar, nesta ordem:**
 1. Mesclar o PR #49 no random (CI verde).
-2. Criar o repositório público `dilons/xadrez` (vazio) e rodar `xadrez/scripts/espelho.sh` (padrão: `origin/main`).
+2. ~~Criar o repositório público `dilons/xadrez`~~ feito em 14/11, com a pasta do PR #49. Depois do merge, `xadrez/scripts/espelho.sh` (padrão: `origin/main`) só confirma que o espelho já está na versão; rode-o de novo sempre que `xadrez/` mudar. A pasta tem uma cópia do `LICENSE` da raiz, porque o espelho só leva `xadrez/`.
 3. Com o Docker de pé (não subiu nesta máquina em 14/11): `KAMINO_BRANCH=feat/xadrez xadrez/scripts/release.sh`. Ele grava o digest e o commit na branch e roda o validador.
 4. Abrir o PR `feat/xadrez` no Forgejo. Conferir com `argocd app diff apps --revision feat/xadrez`; o Atlantis faz o plan do `terraform/cloudflare`, e o **apply vem antes do merge** (regra do kamino). O merge é o deploy.
 5. Depois do deploy: `curl -sS https://xadrez.internal.dilon.me/healthz`, uma partida entre duas pessoas (uma de fora de casa), e conferir no log ou no limite que o IP de quem vem pelo túnel é o público, não o do conector. A Cloudflare do plano gratuito já usa a única regra de rate limit no tarô; o xadrez conta com os limites do próprio app.
